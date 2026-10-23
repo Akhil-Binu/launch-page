@@ -7,6 +7,10 @@ import { createCountdown } from './countdown.js';
 import { launch } from './launcher.js';
 import { FireworksDisplay } from './fireworks.js';
 import { AmbientStarfield } from './ambient.js';
+import { inject } from '@vercel/analytics';
+
+// ── Initialize Vercel Analytics ───────────────────────
+inject();
 
 (() => {
   'use strict';
