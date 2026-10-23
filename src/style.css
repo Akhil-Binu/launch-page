@@ -11,6 +11,11 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Attractive Sci-Fi / Display Heading Font ─────────── */
+.heading-font {
+  font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+}
+
 /* ── Animated background mesh ─────────────────────────── */
 .bg-mesh {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
