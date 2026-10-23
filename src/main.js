@@ -2,7 +2,7 @@
 import './style.css';
 import { normalizeUrl, isValidUrl, truncateUrl } from './url.js';
 import { attachRipple, confetti, flashSuccess, toggleAudio, isAudioEnabled } from './effects.js';
-import { loadRecent, saveRecent, loadHeading, saveHeading } from './storage.js';
+import { loadRecent, saveRecent, loadHeading, saveHeading, loadSubheading, saveSubheading } from './storage.js';
 import { createCountdown } from './countdown.js';
 import { launch } from './launcher.js';
 import { FireworksDisplay } from './fireworks.js';
@@ -18,6 +18,7 @@ inject();
   // ── State ────────────────────────────────────────────
   const DEFAULT_URL = 'https://example.com';
   const DEFAULT_HEADING = 'ORBITAL LAUNCHPAD // V2.0';
+  const DEFAULT_SUBHEADING = 'INITIATE LAUNCH SEQUENCE';
   let targetUrl = DEFAULT_URL;
   let countdownEnabled = false;
   let countdownDuration = 3;
@@ -29,6 +30,10 @@ inject();
   const headingInput       = $('#headingInput');
   const setHeadingBtn      = $('#setHeadingBtn');
   const headingHint        = $('#headingHint');
+  const pageSubheading     = $('#pageSubheading');
+  const subheadingInput    = $('#subheadingInput');
+  const setSubheadingBtn   = $('#setSubheadingBtn');
+  const subheadingHint     = $('#subheadingHint');
   const launchBtn          = $('#launchBtn');
   const targetHint         = $('#targetHint');
   const targetCard         = $('#targetCard');
@@ -237,6 +242,43 @@ inject();
     }, 150);
   });
 
+  // ── Second Heading handling ──────────────────────────
+  function applySubheading() {
+    const raw = subheadingInput.value.trim();
+    if (!raw) {
+      pageSubheading.textContent = DEFAULT_SUBHEADING;
+      subheadingInput.value = '';
+      saveSubheading('');
+      subheadingHint.textContent = 'Reverted to default second heading';
+      subheadingHint.className = 'text-xs text-slate-500 h-4';
+      setTimeout(() => { subheadingHint.textContent = ''; }, 2000);
+      return;
+    }
+
+    pageSubheading.textContent = raw;
+    subheadingInput.value = raw;
+    saveSubheading(raw);
+    subheadingHint.textContent = '✓ Second heading updated';
+    subheadingHint.className = 'text-xs text-emerald-400 h-4';
+    setTimeout(() => { subheadingHint.textContent = ''; }, 2000);
+  }
+
+  setSubheadingBtn.addEventListener('click', applySubheading);
+  subheadingInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') applySubheading();
+  });
+
+  // Live update as user types
+  let subheadingDebounce;
+  subheadingInput.addEventListener('input', () => {
+    clearTimeout(subheadingDebounce);
+    subheadingDebounce = setTimeout(() => {
+      const val = subheadingInput.value.trim();
+      pageSubheading.textContent = val || DEFAULT_SUBHEADING;
+      saveSubheading(val);
+    }, 150);
+  });
+
   // ── Countdown toggle + duration picker ───────────────
   countdownToggle.addEventListener('click', () => {
     countdownEnabled = !countdownEnabled;
@@ -330,6 +372,11 @@ inject();
   if (savedHeading) {
     pageHeading.textContent = savedHeading;
     headingInput.value = savedHeading;
+  }
+  const savedSubheading = loadSubheading();
+  if (savedSubheading) {
+    pageSubheading.textContent = savedSubheading;
+    subheadingInput.value = savedSubheading;
   }
   updateHint();
   updateModeLabel();

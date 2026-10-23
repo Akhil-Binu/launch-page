@@ -2,6 +2,7 @@
 
 const STORAGE_KEY = 'launchpad_recent';
 const HEADING_STORAGE_KEY = 'launchpad_heading';
+const SUBHEADING_STORAGE_KEY = 'launchpad_subheading';
 const MAX_ITEMS = 5;
 
 /**
@@ -31,7 +32,7 @@ export function saveRecent(url) {
 }
 
 /**
- * Load custom heading from localStorage
+ * Load primary heading from localStorage
  * @returns {string}
  */
 export function loadHeading() {
@@ -43,7 +44,7 @@ export function loadHeading() {
 }
 
 /**
- * Persist custom heading to localStorage
+ * Persist primary heading to localStorage
  * @param {string} heading
  */
 export function saveHeading(heading) {
@@ -52,6 +53,32 @@ export function saveHeading(heading) {
       localStorage.setItem(HEADING_STORAGE_KEY, heading.trim());
     } else {
       localStorage.removeItem(HEADING_STORAGE_KEY);
+    }
+  } catch (_) {}
+}
+
+/**
+ * Load second heading / subtitle from localStorage
+ * @returns {string}
+ */
+export function loadSubheading() {
+  try {
+    return localStorage.getItem(SUBHEADING_STORAGE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Persist second heading / subtitle to localStorage
+ * @param {string} subheading
+ */
+export function saveSubheading(subheading) {
+  try {
+    if (subheading && subheading.trim()) {
+      localStorage.setItem(SUBHEADING_STORAGE_KEY, subheading.trim());
+    } else {
+      localStorage.removeItem(SUBHEADING_STORAGE_KEY);
     }
   } catch (_) {}
 }
