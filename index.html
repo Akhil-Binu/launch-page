@@ -18,21 +18,35 @@
   <!-- Fullscreen Wide Fireworks Canvas -->
   <canvas id="fireworksCanvas" class="fixed inset-0 pointer-events-none z-[60]"></canvas>
 
-  <!-- ── Top-Left: System Status HUD ─────────────────── -->
-  <div class="fixed top-6 left-6 z-40 flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[.04] border border-white/[.07] backdrop-blur-md select-none">
-    <span class="relative flex h-2 w-2">
-      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-    </span>
-    <span class="text-[10px] font-mono tracking-widest text-slate-300 uppercase">SYS_READY</span>
-    <span class="text-[9px] font-mono text-slate-500 border-l border-white/10 pl-2">24ms</span>
-  </div>
+  <!-- ── Top Header Navigation Bar ───────────────────── -->
+  <header class="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 pt-5 pb-3 flex items-center justify-between select-none pointer-events-none gap-3">
+    <!-- Top-Left: System Status HUD -->
+    <div class="pointer-events-auto flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[.04] border border-white/[.07] backdrop-blur-md shadow-sm shrink-0">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+      </span>
+      <span class="text-[10px] font-mono tracking-widest text-slate-300 uppercase">SYS_READY</span>
+      <span class="hidden sm:inline text-[9px] font-mono text-slate-500 border-l border-white/10 pl-2">24ms</span>
+    </div>
 
-  <!-- ── Top-Right: Mode HUD Badge (opens settings) ─── -->
-  <button id="modeBadge" class="fixed top-6 right-6 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[.04] border border-white/[.07] backdrop-blur-md text-[10px] font-mono tracking-wider text-slate-300 hover:border-indigo-500/40 hover:bg-white/[.08] transition cursor-pointer select-none group" title="Current launch mode (click to configure)">
-    <span class="text-indigo-400">MODE:</span>
-    <span id="currentModeLabel" class="text-white font-semibold group-hover:text-indigo-300 transition">NEW TAB</span>
-  </button>
+    <!-- Top-Center: Main Heading (100% Fully Visible, Never Truncated) -->
+    <div class="pointer-events-auto flex items-center justify-center min-w-0">
+      <div class="px-5 sm:px-6 py-2 rounded-full bg-slate-900/70 border border-white/[.1] backdrop-blur-xl shadow-xl shadow-indigo-500/10 flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_10px_#818cf8] shrink-0"></span>
+        <h1 id="pageHeading" class="heading-font text-xs sm:text-sm md:text-base font-extrabold tracking-[0.18em] uppercase bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent drop-shadow-[0_0_16px_rgba(99,102,241,0.5)] whitespace-nowrap text-center transition-all duration-300">
+          ORBITAL LAUNCHPAD // V2.0
+        </h1>
+        <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_10px_#818cf8] shrink-0"></span>
+      </div>
+    </div>
+
+    <!-- Top-Right: Mode HUD Badge (opens settings) -->
+    <button id="modeBadge" class="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[.04] border border-white/[.07] backdrop-blur-md text-[10px] font-mono tracking-wider text-slate-300 hover:border-indigo-500/40 hover:bg-white/[.08] transition cursor-pointer shrink-0 group" title="Current launch mode (click to configure)">
+      <span class="text-indigo-400">MODE:</span>
+      <span id="currentModeLabel" class="text-white font-semibold group-hover:text-indigo-300 transition">NEW TAB</span>
+    </button>
+  </header>
 
   <!-- ── Bottom-Left: Audio FX Toggle ───────────────── -->
   <button id="audioToggleBtn" class="fixed bottom-6 left-6 z-40 flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-white/[.04] border border-white/[.07] backdrop-blur-md text-slate-400 hover:text-white hover:bg-white/[.08] transition cursor-pointer select-none group" title="Toggle audio feedback">
@@ -44,17 +58,6 @@
     </div>
     <span id="audioLabel" class="text-[10px] font-mono tracking-widest uppercase text-slate-300">AUDIO ON</span>
   </button>
-
-  <!-- ── Top-Center: Main Custom Heading ──────────────── -->
-  <header class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center justify-center select-none pointer-events-none max-w-[85vw] sm:max-w-none">
-    <div class="px-5 py-2 rounded-full bg-white/[.04] border border-white/[.08] backdrop-blur-md shadow-lg shadow-indigo-500/10 flex items-center gap-3">
-      <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8] shrink-0"></span>
-      <h1 id="pageHeading" class="heading-font text-xs sm:text-sm font-extrabold tracking-[0.25em] uppercase bg-gradient-to-r from-white via-indigo-100 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] truncate max-w-[280px] sm:max-w-[480px] transition-all duration-300">
-        ORBITAL LAUNCHPAD // V2.0
-      </h1>
-      <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8] shrink-0"></span>
-    </div>
-  </header>
 
   <!-- ══════════════ MAIN VIEW — LAUNCH ONLY ══════════════ -->
   <main class="relative z-10 flex flex-col items-center gap-12 select-none">
