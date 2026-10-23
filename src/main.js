@@ -2,7 +2,7 @@
 import './style.css';
 import { normalizeUrl, isValidUrl, truncateUrl } from './url.js';
 import { attachRipple, confetti, flashSuccess, toggleAudio, isAudioEnabled } from './effects.js';
-import { loadRecent, saveRecent } from './storage.js';
+import { loadRecent, saveRecent, loadHeading, saveHeading } from './storage.js';
 import { createCountdown } from './countdown.js';
 import { launch } from './launcher.js';
 import { FireworksDisplay } from './fireworks.js';
@@ -17,6 +17,7 @@ inject();
 
   // ── State ────────────────────────────────────────────
   const DEFAULT_URL = 'https://example.com';
+  const DEFAULT_HEADING = 'ORBITAL LAUNCHPAD // V2.0';
   let targetUrl = DEFAULT_URL;
   let countdownEnabled = false;
   let countdownDuration = 3;
@@ -24,6 +25,10 @@ inject();
   // ── DOM refs ─────────────────────────────────────────
   const $ = (s) => document.querySelector(s);
 
+  const pageHeading        = $('#pageHeading');
+  const headingInput       = $('#headingInput');
+  const setHeadingBtn      = $('#setHeadingBtn');
+  const headingHint        = $('#headingHint');
   const launchBtn          = $('#launchBtn');
   const targetHint         = $('#targetHint');
   const targetCard         = $('#targetCard');
@@ -195,6 +200,43 @@ inject();
     }, 400);
   });
 
+  // ── Custom Heading handling ──────────────────────────
+  function applyHeading() {
+    const raw = headingInput.value.trim();
+    if (!raw) {
+      pageHeading.textContent = DEFAULT_HEADING;
+      headingInput.value = '';
+      saveHeading('');
+      headingHint.textContent = 'Reverted to default heading';
+      headingHint.className = 'text-xs text-slate-500 h-4';
+      setTimeout(() => { headingHint.textContent = ''; }, 2000);
+      return;
+    }
+
+    pageHeading.textContent = raw;
+    headingInput.value = raw;
+    saveHeading(raw);
+    headingHint.textContent = '✓ Heading updated';
+    headingHint.className = 'text-xs text-emerald-400 h-4';
+    setTimeout(() => { headingHint.textContent = ''; }, 2000);
+  }
+
+  setHeadingBtn.addEventListener('click', applyHeading);
+  headingInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') applyHeading();
+  });
+
+  // Live update as user types
+  let headingDebounce;
+  headingInput.addEventListener('input', () => {
+    clearTimeout(headingDebounce);
+    headingDebounce = setTimeout(() => {
+      const val = headingInput.value.trim();
+      pageHeading.textContent = val || DEFAULT_HEADING;
+      saveHeading(val);
+    }, 150);
+  });
+
   // ── Countdown toggle + duration picker ───────────────
   countdownToggle.addEventListener('click', () => {
     countdownEnabled = !countdownEnabled;
@@ -284,6 +326,11 @@ inject();
   });
 
   // ── Init ─────────────────────────────────────────────
+  const savedHeading = loadHeading();
+  if (savedHeading) {
+    pageHeading.textContent = savedHeading;
+    headingInput.value = savedHeading;
+  }
   updateHint();
   updateModeLabel();
   renderRecent();

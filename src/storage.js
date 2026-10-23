@@ -1,6 +1,7 @@
-// ── Recent launches — localStorage persistence ────────
+// ── Recent launches & Settings — localStorage persistence ────────
 
 const STORAGE_KEY = 'launchpad_recent';
+const HEADING_STORAGE_KEY = 'launchpad_heading';
 const MAX_ITEMS = 5;
 
 /**
@@ -27,4 +28,30 @@ export function saveRecent(url) {
   list = list.slice(0, MAX_ITEMS);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   return list;
+}
+
+/**
+ * Load custom heading from localStorage
+ * @returns {string}
+ */
+export function loadHeading() {
+  try {
+    return localStorage.getItem(HEADING_STORAGE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Persist custom heading to localStorage
+ * @param {string} heading
+ */
+export function saveHeading(heading) {
+  try {
+    if (heading && heading.trim()) {
+      localStorage.setItem(HEADING_STORAGE_KEY, heading.trim());
+    } else {
+      localStorage.removeItem(HEADING_STORAGE_KEY);
+    }
+  } catch (_) {}
 }
