@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* ── Base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* ── Animated background mesh ─────────────────────────── */
+.bg-mesh {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,.18), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(168,85,247,.12), transparent),
+    radial-gradient(ellipse 50% 50% at 20% 90%, rgba(99,102,241,.08), transparent);
+}
+
+/* ── Cybernetic Orbital Reticle Rings ─────────────────── */
+.orbital-ring-outer {
+  position: absolute;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  border: 1px dashed rgba(99, 102, 241, 0.22);
+  pointer-events: none;
+  animation: spin-cw 36s linear infinite;
+}
+.orbital-ring-inner {
+  position: absolute;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  border: 1px dotted rgba(168, 85, 247, 0.28);
+  pointer-events: none;
+  animation: spin-ccw 24s linear infinite;
+}
+
+/* Orbiting satellite beacon */
+.orbital-satellite {
+  position: absolute;
+  top: -4px; left: calc(50% - 4px);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8, 0 0 20px #818cf8;
+}
+
+@keyframes spin-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes spin-ccw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* ── Glow ring around launch button ───────────────────── */
+.glow-ring {
+  position: absolute; inset: -6px; border-radius: 9999px; z-index: 0;
+  background: conic-gradient(from 0deg, #6366f1, #a855f7, #ec4899, #6366f1);
+  opacity: 0; transition: opacity .5s ease; filter: blur(14px);
+}
+.launch-btn:hover .glow-ring,
+.launch-btn:focus-visible .glow-ring { opacity: .65; }
+
+/* ── Diagonal Glass Shimmer Glare across the button ────── */
+.btn-shimmer {
+  position: absolute; inset: 0; border-radius: 9999px; overflow: hidden; pointer-events: none; z-index: 5;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  animation: glare-sweep 4.5s ease-in-out infinite;
+}
+@keyframes glare-sweep {
+  0%, 35% { transform: translateX(-120%) rotate(25deg); }
+  65%, 100% { transform: translateX(120%) rotate(25deg); }
+}
+
+/* ── Hover lift & 3D dynamics ─────────────────────────── */
+.launch-btn {
+  position: relative;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
+  transform-style: preserve-3d;
+}
+.launch-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 60px -10px rgba(99,102,241,.45);
+}
+.launch-btn:active { transform: translateY(0) scale(.96); }
+
+/* ── Soundwave animation bars ─────────────────────────── */
+.sound-bar {
+  width: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  animation: sound-bounce 0.8s ease-in-out infinite alternate;
+}
+.sound-bar:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+.sound-bar:nth-child(2) { height: 14px; animation-delay: 0.3s; }
+.sound-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+.sound-bar:nth-child(4) { height: 6px; animation-delay: 0.4s; }
+
+@keyframes sound-bounce {
+  from { transform: scaleY(0.4); }
+  to { transform: scaleY(1.2); }
+}
+
+/* ── Slow ambient ping ────────────────────────────────── */
+@keyframes ping-slow {
+  0%   { opacity: .4; transform: scale(1); }
+  70%  { opacity: 0;  transform: scale(1.5); }
+  100% { opacity: 0;  transform: scale(1.5); }
+}
+.animate-ping-slow { animation: ping-slow 3s cubic-bezier(0,0,.2,1) infinite; }
+
+/* ── Ripple ────────────────────────────────────────────── */
+.ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.3);
+  transform: scale(0); animation: ripple-anim .7s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+/* ── Confetti ──────────────────────────────────────────── */
+.confetti-piece {
+  position: fixed; width: 8px; height: 8px; z-index: 9999;
+  pointer-events: none; border-radius: 2px;
+  animation: confetti-fall 1.2s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+@keyframes confetti-fall {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(60vh) rotate(720deg) scale(.4); }
+}
+
+/* ── Cracker / Popper burst particles ─────────────────── */
+.cracker-particle {
+  position: fixed; z-index: 10000; pointer-events: none;
+  border-radius: 50%;
+  animation: cracker-burst var(--burst-duration, .8s) cubic-bezier(.15,.6,.35,1) forwards;
+}
+@keyframes cracker-burst {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); }
+}
+
+/* Spark trails */
+.cracker-spark {
+  position: fixed; z-index: 10000; pointer-events: none;
+  width: 3px; border-radius: 2px;
+  animation: spark-fly var(--spark-duration, .6s) ease-out forwards;
+  transform-origin: center center;
+}
+@keyframes spark-fly {
+  0%   { opacity: 1; transform: translate(-50%, -50%) rotate(var(--angle)) scaleY(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--angle)) scaleY(0.2); }
+}
+
+/* Ring shockwave */
+.cracker-ring {
+  position: fixed; z-index: 9999; pointer-events: none;
+  border-radius: 50%; border: 2px solid;
+  animation: ring-expand .6s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+}
+@keyframes ring-expand {
+  0%   { opacity: 1; transform: scale(0.2); }
+  100% { opacity: 0; transform: scale(2.6); }
+}
+
+/* Ambient explosion flash */
+.cracker-flash {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.28), rgba(168, 85, 247, 0.18), transparent 70%);
+  animation: flash-fade 0.4s ease-out forwards;
+}
+@keyframes flash-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Number shake & pop glow on tick */
+.shake-tick {
+  animation: shake 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-shadow: 0 0 25px rgba(168, 85, 247, 0.8), 0 0 45px rgba(99, 102, 241, 0.6);
+}
+@keyframes shake {
+  0%   { transform: scale(1.4) rotate(-3deg); }
+  35%  { transform: scale(0.92) rotate(2deg); }
+  70%  { transform: scale(1.08) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ── Parabolic trajectory arc styling ─────────────────── */
+#countdownParabola {
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.75));
+}
+
+/* ── Success glow flash ───────────────────────────────── */
+.success-flash {
+  animation: flash-glow .9s ease-out;
+}
+@keyframes flash-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,.7); }
+  40%  { box-shadow: 0 0 60px 20px rgba(168,85,247,.4); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+
+
+/* ── Chip hover ────────────────────────────────────────── */
+.chip {
+  transition: background .2s, transform .15s, border-color .2s;
+}
+.chip:hover {
+  background: rgba(99,102,241,.2) !important;
+  border-color: rgba(99,102,241,.3) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Custom toggle switch ─────────────────────────────── */
+.toggle-track {
+  width: 44px; height: 24px; border-radius: 12px;
+  background: #334155; position: relative; cursor: pointer;
+  transition: background .25s;
+}
+.toggle-track.active { background: linear-gradient(135deg, #6366f1, #a855f7); }
+.toggle-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; transition: left .25s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+.toggle-track.active .toggle-thumb { left: 22px; }
+
+/* ── Settings drawer open state ───────────────────────── */
+#settingsDrawer {
+  translate: 0 100%;
+  transition: translate .5s cubic-bezier(.22,1,.36,1);
+}
+#settingsDrawer.open { translate: 0 0 !important; }
+#settingsBackdrop.open { opacity: 1 !important; pointer-events: auto !important; }
+
+/* ── Mode card checked state (fallback for no has) ────── */
+.mode-card { transition: background .2s, border-color .2s; }
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
